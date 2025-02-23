@@ -1,4 +1,16 @@
+<script setup>
+import { ref, onMounted } from 'vue';
+
+const ping = ref("");
+
+onMounted(async () => {
+  const resp = await fetch("/api/ping");
+  ping.value = await resp.json();
+});
+</script>
+
 <template>
+  <h2>{{ ping }}</h2>
   <div class="item">
     <i>
       <slot name="icon"></slot>

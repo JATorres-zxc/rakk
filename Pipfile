@@ -6,9 +6,9 @@ name = "pypi"
 [packages]
 django = "*"
 djangorestframework = "*"
-psycopg = {extras = ["binary", "pool"], version = "*"}
+psycopg = {extras = ["pool", "binary"], version = "*"}
 
 [dev-packages]
 
 [requires]
-python_version = "3.12"
+python_version = "3.13"
