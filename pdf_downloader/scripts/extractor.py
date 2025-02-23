@@ -7,7 +7,9 @@ pdf_path = "pdf_downloader/data/daily_price_1.pdf"
 output_folder = pdf_path.replace(".pdf", "")  # Folder: daily_price_1/
 
 def extract_tables_from_pdf():
-    """Extracts tables from pages 1 to 3 of `daily_price_1.pdf`, saves each page separately."""
+    """Extracts tables from pages 1 to 3 of `daily_price_1.pdf`, saves each page separately.
+       Also removes the extra column between 'Tomato' and 'Cabbage' ONLY on Page 2.
+    """
 
     if not os.path.exists(pdf_path):
         print(f"❌ PDF not found: {pdf_path}")
@@ -30,6 +32,12 @@ def extract_tables_from_pdf():
 
                     # Remove empty rows
                     df = df.dropna(how='all')
+
+                    # ✅ Forcefully remove the column between "Tomato" and "Cabbage" ONLY for Page 2
+                    if page_num == 1:  # Page 2 (zero-based index)
+                        if len(df.columns) > 5:  # Ensure there's an extra column before dropping
+                            df.drop(df.columns[4], axis=1, inplace=True)  # Drop the 5th column (index 4)
+                            print("🚀 Extra column between 'Tomato' and 'Cabbage' removed from Page 2!")
 
                     if not df.empty:
                         # Save each page as a separate CSV file
