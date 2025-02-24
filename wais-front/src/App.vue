@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/vue'
+import { ref } from 'vue';
+import CalendarPage from './components/CalendarPage.vue';
+import HeaderBar from './components/HeaderBar.vue';
+import SidebarMenu from './components/SidebarMenu.vue';
+
 </script>
 
 <template>
-  <header>
-    <SignedOut>
-      <SignInButton />
-    </SignedOut>
-    <SignedIn>
-      <UserButton />
-    </SignedIn>
-  </header>
+  <div>
+    <HeaderBar />
+  </div>
+  <div>
+      <SidebarMenu />
+  </div>
+
+
+  <!-- <CalendarPage /> -->
+
+
 </template>

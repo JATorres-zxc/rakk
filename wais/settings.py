@@ -11,6 +11,15 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
+
+CLERK_JWT_KEY = os.getenv("CLERK_JWT_KEY")
+
+
+CLERK_JWT_KEY = os.getenv("CLERK_JWT_KEY", "your-clerk-secret-key")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'wais.middleware.ClerkAuthMiddleware', 
 ]
 
 ROOT_URLCONF = 'wais.urls'
@@ -81,6 +91,11 @@ DATABASES = {
             "service": "waisdb",
             "passfile": ".pgpass",
         },
+        "NAME": "waisdb",         # Your DB name
+        "USER": "your_user",      # Your PostgreSQL user
+        "PASSWORD": "your_password",  # Your PostgreSQL password
+        "HOST": "localhost",       # or your database server
+        "PORT": "5432",  
     }
 }
 
