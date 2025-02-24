@@ -38,6 +38,7 @@ export default defineComponent({
 
 <style scoped>
 .sidebar-menu {
+  margin-top: -79px;
   background-color: #4a6c2f;
   display: flex;
   flex-direction: column;

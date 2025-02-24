@@ -50,9 +50,10 @@ export default defineComponent({
 
 <style scoped>
 .header-bar {
+  margin-left: 124px;
   z-index: 10;
   display: flex;
-  width: 1349.4px;
+  width: 1225.4px;
   max-width: 100%;
   justify-content: space-between;
   padding: 13px 26px 13px 80px;
