@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@schedule-x/theme-default": "^2.20.0",
+    "@schedule-x/vue": "^2.18.0"
+  }
+}
