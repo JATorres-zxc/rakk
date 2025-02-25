@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 # Load the CSV File
-csv_path = "pdf_downloader/data/daily_price_1/daily_price_1_3.csv"  # Change if needed
+csv_path = "pdf_downloader/data/daily_price_1/daily_price_1_3.csv"  # Change if needed 
 df = pd.read_csv(csv_path, skiprows=[0], header=[0])
 
 # ✅ Ensure all column names are strings
@@ -39,7 +39,7 @@ df["Market"] = df["Market"].map(market_codes)  # Replace market names
 
 # ✅ Function to clean and get average of price values
 def clean_price(value):
-    """Convert price range to average, replace 'NOT AVAILABLE' or empty with -1."""
+    """Convert price range to average, replace 'NOT AVAILABLE' or empty with -1.0."""
     if isinstance(value, str):
         if "NOT AVAILABLE" in value or value.strip() == "":
             return -1.0
@@ -58,9 +58,13 @@ def clean_price(value):
 numeric_columns = df.columns[1:]
 df[numeric_columns] = df[numeric_columns].map(clean_price)
 
+# ✅ Convert all values to float and round to 2 decimal places
+df = df.astype(float).applymap(lambda x: round(x, 2))
+
 # ✅ Save Cleaned Data
-clean_csv_path = "pdf_downloader/data/daily_price_1/daily_price_3_cleaned.csv"
-df.to_csv(clean_csv_path, index=False)
+clean_csv_path = "pdf_downloader/data/daily_price_1/daily_price_3_cleaned.csv" 
+df.to_csv(clean_csv_path, index=False, float_format="%.2f")  # Ensure 2 decimal places in output
 
 print(f"✅ Cleaned data saved at: {clean_csv_path}")
+print(df.dtypes)  # Display data types to confirm everything is float
 print(df.head())  # Display cleaned data
