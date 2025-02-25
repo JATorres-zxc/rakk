@@ -39,10 +39,10 @@ df["Market"] = df["Market"].map(market_codes)  # Replace market names
 
 # ✅ Function to clean and get average of price values
 def clean_price(value):
-    """Convert price range to average, replace 'NOT AVAILABLE' or empty with -1.0."""
+    """Convert price range to average, replace 'NOT AVAILABLE' or empty with NaN."""
     if isinstance(value, str):
         if "NOT AVAILABLE" in value or value.strip() == "":
-            return -1.0
+            return np.nan  # Use NaN instead of -1.0
         
         numbers = re.findall(r"\d+\.\d+|\d+", value)  # Extract numeric values
         numbers = list(map(float, numbers)) 
@@ -52,11 +52,11 @@ def clean_price(value):
         elif len(numbers) == 1:
             return round(numbers[0], 2)
 
-    return -1.0  # Default for NaN or invalid values
+    return np.nan  # Default for NaN or invalid values
 
 # ✅ Apply function to all numeric columns except "Market"
 numeric_columns = df.columns[1:]
-df[numeric_columns] = df[numeric_columns].map(clean_price)
+df[numeric_columns] = df[numeric_columns].map(clean_price).astype(float)
 
 # ✅ Convert all values to float and round to 2 decimal places
 df = df.astype(float).applymap(lambda x: round(x, 2))
