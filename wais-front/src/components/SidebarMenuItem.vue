@@ -1,8 +1,8 @@
 <template>
   <div 
     class="sidebar-menu-item" 
-    @mouseover="!isClicked && (isHovered = true)" 
-    @mouseleave="!isClicked && (isHovered = false)" 
+    @mouseover="isHovered = true" 
+    @mouseleave="isHovered = false" 
     @click="handleClick"
     :class="{ 'clicked': isClicked, 'flicker': shouldFlicker }"
   >
@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, watch } from "vue";
 
 export default defineComponent({
   name: "SidebarMenuItem",
@@ -37,6 +37,13 @@ export default defineComponent({
         shouldFlicker.value = false;
       }, 300);
     };
+
+    // Watch for `selected` prop changes and reset hover state
+    watch(() => props.selected, (newValue) => {
+      if (!newValue) {
+        isHovered.value = false;
+      }
+    });
 
     return { isHovered, isClicked, shouldFlicker, handleClick };
   },
