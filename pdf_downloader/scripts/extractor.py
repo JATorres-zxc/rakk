@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 # Path to the specific PDF
-pdf_path = "pdf_downloader/data/daily_price_1.pdf"
+pdf_path = "pdf_downloader\data\Daily_Price_2.pdf"
 output_folder = pdf_path.replace(".pdf", "")
 
 def make_column_names_unique(columns):

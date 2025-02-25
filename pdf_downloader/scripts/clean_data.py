@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 # Load the CSV File
-csv_path = "pdf_downloader/data/daily_price_1/daily_price_1_3.csv"  # Change if needed 
+csv_path = "pdf_downloader\data\daily_price_2\daily_price_2_1.csv"  # Change if needed 
 df = pd.read_csv(csv_path, skiprows=[0], header=[0])
 
 # ✅ Ensure all column names are strings
@@ -61,8 +61,16 @@ df[numeric_columns] = df[numeric_columns].map(clean_price).astype(float)
 # ✅ Convert all values to float and round to 2 decimal places
 df = df.astype(float).applymap(lambda x: round(x, 2))
 
+# ✅ Fill missing values using group-based average
+df["Market_Group"] = df["Market"].astype(int)  # Extract integer part to group
+
+for col in numeric_columns:
+    df[col] = df.groupby("Market_Group")[col].transform(lambda x: x.fillna(x.mean()))
+
+df.drop(columns=["Market_Group"], inplace=True)  # Remove helper column
+
 # ✅ Save Cleaned Data
-clean_csv_path = "pdf_downloader/data/daily_price_1/daily_price_3_cleaned.csv" 
+clean_csv_path = "pdf_downloader/data/daily_price_2/daily_price_2.1_cleaned.csv" 
 df.to_csv(clean_csv_path, index=False, float_format="%.2f")  # Ensure 2 decimal places in output
 
 print(f"✅ Cleaned data saved at: {clean_csv_path}")
