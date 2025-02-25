@@ -5,33 +5,81 @@
       alt="Logo"
       class="logo"
     />
-    <SidebarMenuItem icon="https://cdn.builder.io/api/v1/image/assets/ecf01e10324340c9995a5c95c87db7a5/26a852f0243c09a192a5c3f821f69d770983cc608a3f508e9805e4a3ff1848de?apiKey=ecf01e10324340c9995a5c95c87db7a5&" label="Rice" />
-    <SidebarMenuItem icon="https://cdn.builder.io/api/v1/image/assets/ecf01e10324340c9995a5c95c87db7a5/94a21e3c5cefc112954ca8a64cfcf84da09b4b41fee11300b20c732e06c5b5b4?apiKey=ecf01e10324340c9995a5c95c87db7a5&" label="Corn" />
-    <SidebarMenuItem icon="https://cdn.builder.io/api/v1/image/assets/ecf01e10324340c9995a5c95c87db7a5/b7303ab62d3af8dda564b4d2e526aac22c852cd52219f05f61ad7809d37aaa56?apiKey=ecf01e10324340c9995a5c95c87db7a5&" label="Poultry" />
-    <SidebarMenuItem icon="https://cdn.builder.io/api/v1/image/assets/ecf01e10324340c9995a5c95c87db7a5/50177569e27fe550a56ccd12fdd23b528340320a9f4eec7a310ca79f1151492f?apiKey=ecf01e10324340c9995a5c95c87db7a5&" label="Fish" />
-    <img
-      src="https://cdn.builder.io/api/v1/image/assets/ecf01e10324340c9995a5c95c87db7a5/ffc0481640c1e254fa7693bb24c3cf3b4ca2b787e126eb46d794fa1d32d6846d?apiKey=ecf01e10324340c9995a5c95c87db7a5&"
-      alt=""
-      class="decorative-image"
+    <SidebarMenuItem
+      icon="/src/assets/icons/rice.png"
+      hoverIcon="/src/assets/icons/rice_colored.png"
+      label="Rice"
+      :selected="selectedLabel === 'Rice'"
+      @update:selectedLabel="toggleSelection"
     />
-    <SidebarMenuItem icon="https://cdn.builder.io/api/v1/image/assets/ecf01e10324340c9995a5c95c87db7a5/7d0166109d0a187d0b374afc680a8d4ff00bea749c7466b0d900c8c17272ff4f?apiKey=ecf01e10324340c9995a5c95c87db7a5&" label="Fruit" />
-    <SidebarMenuItem icon="https://cdn.builder.io/api/v1/image/assets/ecf01e10324340c9995a5c95c87db7a5/d58f65d158b5080c6670aab72ac3002cf902816820ab4f0f49b34642de9f29aa?apiKey=ecf01e10324340c9995a5c95c87db7a5&" label="Spices" />
-    <img
-      src="https://cdn.builder.io/api/v1/image/assets/ecf01e10324340c9995a5c95c87db7a5/023f94ba144e4c837ed9d8a56cdb4d9370ca6ab0c4a31dd6046238a2fec56022?apiKey=ecf01e10324340c9995a5c95c87db7a5&"
-      alt=""
-      class="decorative-image"
+    <SidebarMenuItem
+      icon="/src/assets/icons/corn.png"
+      hoverIcon="/src/assets/icons/corn_colored.png"
+      label="Corn"
+      :selected="selectedLabel === 'Corn'"
+      @update:selectedLabel="toggleSelection"
+    />
+    <SidebarMenuItem
+      icon="/src/assets/icons/poultry.png"
+      hoverIcon="/src/assets/icons/poultry_colored.png"
+      label="Poultry"
+      :selected="selectedLabel === 'Poultry'"
+      @update:selectedLabel="toggleSelection"
+    />
+    <SidebarMenuItem
+      icon="/src/assets/icons/fish.png"
+      hoverIcon="/src/assets/icons/fish_colored.png"
+      label="Fish"
+      :selected="selectedLabel === 'Fish'"
+      @update:selectedLabel="toggleSelection"
+    />
+    <SidebarMenuItem
+      icon="/src/assets/icons/vegetable.png"
+      hoverIcon="/src/assets/icons/vegetable_colored.png"
+      label="Vegetable"
+      :selected="selectedLabel === 'Vegetable'"
+      @update:selectedLabel="toggleSelection"
+    />
+    <SidebarMenuItem
+      icon="/src/assets/icons/fruits.png"
+      hoverIcon="/src/assets/icons/fruits_colored.png"
+      label="Fruit"
+      :selected="selectedLabel === 'Fruit'"
+      @update:selectedLabel="toggleSelection"
+    />
+    <SidebarMenuItem
+      icon="/src/assets/icons/spices.png"
+      hoverIcon="/src/assets/icons/spices_colored.png"
+      label="Spices"
+      :selected="selectedLabel === 'Spices'"
+      @update:selectedLabel="toggleSelection"
+    />
+    <SidebarMenuItem
+      icon="/src/assets/icons/others.png"
+      hoverIcon="/src/assets/icons/others_colored.png"
+      label="Others"
+      :selected="selectedLabel === 'Others'"
+      @update:selectedLabel="toggleSelection"
     />
   </nav>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from "vue";
 import SidebarMenuItem from "@/components/SidebarMenuItem.vue";
 
 export default defineComponent({
-  name: 'SidebarMenu',
-  components: {
-    SidebarMenuItem,
+  name: "SidebarMenu",
+  components: { SidebarMenuItem },
+  setup() {
+    const selectedLabel = ref<string | null>(null);
+
+    // Toggle selection logic
+    const toggleSelection = (label: string | null) => {
+      selectedLabel.value = selectedLabel.value === label ? null : label;
+    };
+
+    return { selectedLabel, toggleSelection };
   },
 });
 </script>
@@ -57,6 +105,8 @@ export default defineComponent({
   object-position: center;
   width: 100%;
   align-self: stretch;
+  margin-top: -10px;
+  margin-bottom: 40px;
 }
 
 .decorative-image {
