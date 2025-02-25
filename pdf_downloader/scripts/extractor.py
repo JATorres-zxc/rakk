@@ -2,50 +2,87 @@ import pdfplumber
 import pandas as pd
 import os
 
-# Path to the specific PDF for testing
+# Path to the specific PDF
 pdf_path = "pdf_downloader/data/daily_price_1.pdf"
-output_folder = pdf_path.replace(".pdf", "")  # Folder: daily_price_1/
+output_folder = pdf_path.replace(".pdf", "")
+
+def make_column_names_unique(columns):
+    """Ensure unique column names by appending numbers to duplicates."""
+    seen = {}
+    unique_columns = []
+    for col in columns:
+        if col in seen:
+            seen[col] += 1
+            unique_columns.append(f"{col}_{seen[col]}")
+        else:
+            seen[col] = 0
+            unique_columns.append(col)
+    return unique_columns
 
 def extract_tables_from_pdf():
-    """Extracts tables from pages 1 to 3 of `daily_price_1.pdf`, saves each page separately.
-       Also removes the extra column between 'Tomato' and 'Cabbage' ONLY on Page 2.
-    """
+    """Extracts and cleans tables from the PDF for better accuracy."""
 
     if not os.path.exists(pdf_path):
         print(f"❌ PDF not found: {pdf_path}")
         return
 
-    # Create output folder if it doesn't exist
     os.makedirs(output_folder, exist_ok=True)
 
+    all_data = []  # List to store all tables
+
     with pdfplumber.open(pdf_path) as pdf:
-        for page_num in range(0, 3):  # Pages 1 to 3 (Python index starts at 0)
-            if page_num < len(pdf.pages):
-                page = pdf.pages[page_num]
-                table = page.extract_table()
+        for page_num in range(min(3, len(pdf.pages))):  # Extract first 3 pages safely
+            page = pdf.pages[page_num]
+            
+            # Extract table with better accuracy
+            table = page.extract_table({"snap_tolerance": 3})
 
-                if table:
-                    structured_data = [row for row in table]
+            if table:
+                df = pd.DataFrame(table)
 
-                    # Convert to DataFrame
-                    df = pd.DataFrame(structured_data)
+                # Remove completely empty rows
+                df = df.dropna(how='all')
 
-                    # Remove empty rows
-                    df = df.dropna(how='all')
+                # Ensure first row is properly assigned as headers
+                df.columns = df.iloc[0].fillna("")  # Replace None values with empty strings
+                df = df[1:].reset_index(drop=True)  # Remove first row and reset index
 
-                    # ✅ Forcefully remove the column between "Tomato" and "Cabbage" ONLY for Page 2
-                    if page_num == 1:  # Page 2 (zero-based index)
-                        if len(df.columns) > 5:  # Ensure there's an extra column before dropping
-                            df.drop(df.columns[4], axis=1, inplace=True)  # Drop the 5th column (index 4)
-                            print("🚀 Extra column between 'Tomato' and 'Cabbage' removed from Page 2!")
+                # Ensure unique column names
+                df.columns = make_column_names_unique(df.columns)
 
-                    if not df.empty:
-                        # Save each page as a separate CSV file
-                        csv_filename = os.path.join(output_folder, f"daily_price_1_{page_num + 1}.csv")
-                        df.to_csv(csv_filename, index=False)
-                        print(f"✅ Page {page_num + 1} extracted and saved: '{csv_filename}'")
-                    else:
-                        print(f"⚠️ No valid table data found on Page {page_num + 1}.")
+                # Fix any misaligned rows (like "NOT AVAILABLE" values)
+                df = df.map(lambda x: x.strip() if isinstance(x, str) else x)
+
+                # Standardize column names (fix \r\n and empty names)
+                df.columns = [str(col).replace("\r\n", " ").strip() for col in df.columns]
+
+                # Fix inconsistent number ranges (e.g., "150.00 - 160.00")
+                def clean_number_ranges(val):
+                    if isinstance(val, str):
+                        return val.replace(" ", "").replace("–", "-")
+                    return val
+
+                df = df.map(clean_number_ranges)
+
+                # Store data for final processing
+                all_data.append(df)
+
+                # Save CSV for each page
+                csv_filename = os.path.join(output_folder, f"daily_price_2_{page_num + 1}.csv")
+                df.to_csv(csv_filename, index=False)
+                print(f"✅ Page {page_num + 1} extracted and saved: '{csv_filename}'")
+            else:
+                print(f"⚠️ No valid table data found on Page {page_num + 1}.")
+
+    # # Combine all extracted tables into one CSV
+    # if all_data:
+    #     try:
+    #         final_df = pd.concat(all_data, ignore_index=True)
+    #         final_csv_path = os.path.join(output_folder, "daily_price_combined.csv")
+    #         final_df.to_csv(final_csv_path, index=False)
+    #         print(f"🚀 Final cleaned data saved to '{final_csv_path}'")
+    #     except Exception as e:
+    #         print(f"❌ Error combining tables: {e}")
 
 if __name__ == "__main__":
     extract_tables_from_pdf()
