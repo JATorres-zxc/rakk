@@ -2,9 +2,6 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/vue'
 </script>
 
-
-
-
 <template>
   <header class="header-bar">
     <nav class="navigation">
@@ -27,12 +24,14 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/vue'
     </nav>
     
     <div class="user-actions">
-      <header class="user-avatar">
+      <header>
     <SignedOut>
-      <SignInButton />
+      <SignInButton mode='modal'>
+      <button class="button">Login</button>
+      </SignInButton>
     </SignedOut>
-    <SignedIn class="user-avatar">
-      <UserButton />
+    <SignedIn>
+      <UserButton class="userbtn" />
     </SignedIn>
   </header>
     </div>
@@ -58,6 +57,7 @@ export default defineComponent({
   justify-content: space-between;
   padding: 13px 26px 13px 80px;
   border: 1px solid #e0e0e0;
+  align-items: center;
 }
 
 .navigation {
@@ -66,7 +66,22 @@ export default defineComponent({
   margin: auto 0;
   font: 600 20px Inter, sans-serif;
 }
-
+.button {
+  margin-top: 10px;
+  background: none;
+  border: none;
+  font: 100 16px Inter, sans-serif;
+  color: black;
+  cursor: pointer;
+  padding: 1;
+}
+.userbtn {
+  width: 40px;
+  height: 40px;
+}
+.button:hover {
+  color: blue;
+}
 .nav-item {
   display: flex;
   gap: 17px;
@@ -82,7 +97,7 @@ export default defineComponent({
   aspect-ratio: 1;
   object-fit: contain;
   object-position: center;
-  width: 32px;
+  width: 16px;
 }
 
 .user-actions {
