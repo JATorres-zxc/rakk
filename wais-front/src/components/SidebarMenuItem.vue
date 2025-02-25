@@ -58,9 +58,25 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 19.5px;
+  margin-bottom: 25px;
   cursor: pointer;
+  padding-left: 0px;
+  transition: border-left 0.3s ease-in-out;
+  position: relative;
+  width: 100%;
+  text-align: center;
 }
+
+.sidebar-menu-item.clicked::after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: -12.5px;
+  width: 4px;
+  height: 120%;
+  background-color: #DAE000;
+}
+
 
 .menu-icon {
   width: 20px;

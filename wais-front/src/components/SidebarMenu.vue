@@ -86,18 +86,20 @@ export default defineComponent({
 
 <style scoped>
 .sidebar-menu {
-  margin-top: -79px;
+  position: fixed; /* Keeps it fixed on the left */
+  top: 0;
+  left: 0;
+  width: 124px; /* Keep or adjust as needed */
+  height: 100vh; /* Makes it extend to the full viewport height */
   background-color: #4a6c2f;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   align-items: center;
   color: #f5e8c7;
-  width: 124px;
-  max-width: 100%;
   padding: 40px 13px;
   font: 300 14px Inter, sans-serif;
 }
+
 
 .logo {
   aspect-ratio: 4.31;
