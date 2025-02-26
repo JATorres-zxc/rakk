@@ -6,7 +6,9 @@
   padding: 2rem;
   font-weight: normal;
 } */
-
+body {
+  font-family: 'Inter', sans-serif;
+}
 
 @media (min-width: 1024px) {
   body {
