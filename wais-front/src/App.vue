@@ -1,25 +1,29 @@
-<script setup lang="ts">
-import CalendarPage from './components/CalendarPage.vue';
-import HeaderBar from './components/HeaderBar.vue';
-import SidebarMenu from './components/SidebarMenu.vue';
+  <script setup lang="ts">
+  import HeaderBar from './components/HeaderBar.vue';
+  import Sidebar from './components/Sidebar.vue';
+  </script>
 
-</script>
+  <template>
+    <div class="container">
+      <!-- Sidebar -->
+      <Sidebar />
 
-<template>
-  <div>
-    <HeaderBar />
-  </div>
-  <div>
-      <SidebarMenu />
-  </div>
+      <!-- Main Content (Header and Other Pages) -->
+      <div class="main-content">
+        <HeaderBar />
+      </div>
+    </div>
+  </template>
 
+  <style scoped>
+  .container {
+    display: flex;
+    height: 100vh; /* Full height */
+  }
 
-  <!-- <CalendarPage /> -->
-
-
-
-
-
-
-
-</template>
+  .main-content {
+    flex: 1; /* Takes the remaining space */
+    display: flex;
+    flex-direction: column;
+  }
+  </style>

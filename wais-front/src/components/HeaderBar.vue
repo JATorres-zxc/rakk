@@ -49,15 +49,18 @@ export default defineComponent({
 
 <style scoped>
 .header-bar {
-  margin-left: 124px;
+  position: absolute;
+  left: 125px; /* Adjust this based on your sidebar width */
+  right: 0;
   z-index: 10;
   display: flex;
-  width: 1225.4px;
-  max-width: 100%;
+  width: calc(100% - 125px); /* Adjust the width dynamically */
+  height: 55px;
   justify-content: space-between;
-  padding: 13px 26px 13px 80px;
+  padding: 13px 26px;
   border: 1px solid #e0e0e0;
   align-items: center;
+  background: white; /* Ensure it does not overlap transparently */
 }
 
 .navigation {
