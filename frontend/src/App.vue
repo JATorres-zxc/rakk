@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SideBar from './components/Sidebar.vue'
 import HeaderBar from './components/HeaderBar.vue'
+import Calendar from './components/Calendar.vue'
 
 </script>
 
@@ -10,7 +11,7 @@ import HeaderBar from './components/HeaderBar.vue'
   <div class="container">
     <!-- Sidebar -->
     <SideBar />
-
+    <Calendar />
     <!-- Main Content (Header and Other Pages) -->
     <div class="main-content">
       <HeaderBar />
