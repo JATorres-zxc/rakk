@@ -1,23 +1,32 @@
-@import './base.css';
+* {
+  box-sizing: border-box;
+}
 
-/* #app {
+body {
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#app {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  font-weight: normal;
-} */
-body {
-  font-family: 'Inter', sans-serif;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-  }
-
-  /* #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  } */
+.sx-vue-calendar-wrapper {
+  width: 100%;
+  height: 800px;
+  max-height: 100vh;
+  background-color: red;
 }
+
+.sx__month-grid-cell {
+  height: clamp(2px, 1.25rem, 10px);
+}
+
+
