@@ -28,7 +28,7 @@
             class="floating-sidebar" 
             :style="{ top: `${sidebarTop}px` }">
             <div class="checkbox-list-header">
-                <p class="checkbox-list-title">{{ menuItems[activeIndex].name }}</p>
+                <p class="checkbox-list-title" style="font-weight: bold;">{{ menuItems[activeIndex].name }}</p>
                 <img src="@/assets/icons/chevron_left.png" 
                 alt="Close" 
                 class="close-btn" 
@@ -245,10 +245,11 @@ ul {
 
 /* Floating Sidebar */
 .floating-sidebar {
+  border-radius: 7px;
     position: absolute;
     left: 135px;
     width: 160px;
-    background: white;
+    background: #feffc3;
     padding: 10px;
     border: 1px solid #ccc;
 }
@@ -279,7 +280,6 @@ ul {
     align-items: center;
     justify-content: center;
     position: relative;
-    margin-bottom: 10px;
 }
 
 .checkbox-list-title {

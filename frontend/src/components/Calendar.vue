@@ -15,6 +15,7 @@ import { shallowRef } from "vue";
 import type { CSSProperties } from "vue";
 import {createCalendarControlsPlugin} from "@schedule-x/calendar-controls";
 
+
 const eventsService = createEventsServicePlugin();
 const calendarControls = createCalendarControlsPlugin();
 const eventModal = createEventModalPlugin();
@@ -111,7 +112,7 @@ const eventStyles = {
 
 const eventModalStyles: CSSProperties = {
   boxShadow: "0 0 2em #123",
-  backgroundColor: "#fdf8dc", // Light yellowish background
+  backgroundColor: "#feffaf", // Light yellowish background
   border: "2px solid black",
   borderRadius: "8px",
   padding: "1rem",
@@ -126,7 +127,8 @@ const eventModalStyles: CSSProperties = {
 
 <template>
   <div>
-    <ScheduleXCalendar
+    <ScheduleXCalendar 
+        style="display: inline-block; text-align: center; margin: auto;"
         :calendar-app="calendarApp"
     >
       <template #dateGridEvent="{ calendarEvent }">
@@ -148,9 +150,15 @@ const eventModalStyles: CSSProperties = {
       </template>
 
       <template #eventModal="{ calendarEvent }">
-        <div :style="eventModalStyles">
-
-    <p>{{ formatDateRange(calendarEvent.start, calendarEvent.end) }}</p>
+  <div :style="eventModalStyles">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+      <p style="font-weight: bold; font-size: large; margin: 0; flex-grow: 1; text-align: center;">
+        {{ formatDateRange(calendarEvent.start, calendarEvent.end) }}
+      </p>
+      <button @click="closeModal" class="close-button">
+        <img src="@/assets/close-icon.png" alt="Close" />
+      </button>
+    </div>
 
     <table>
       <thead>
@@ -171,10 +179,9 @@ const eventModalStyles: CSSProperties = {
         </tr>
       </tbody>
     </table>
-
-    <button @click="closeModal">Close</button>
   </div>
 </template>
+
 
 
     </ScheduleXCalendar>
@@ -182,5 +189,34 @@ const eventModalStyles: CSSProperties = {
 </template>
 
 <style scoped>
+table {
+  width: 100%; /* Ensures the table takes full width */
+  border-collapse: collapse; /* Ensures proper spacing */
+}
 
+th, td {
+  padding: 10px; /* Adds spacing inside cells */
+  text-align: center; /* Aligns text to center */
+}
+
+th {
+  width: 33.33%; /* Distributes columns equally */
+}
+
+.close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.close-button img {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.close-button:hover img {
+  transform: scale(1.2); /* Increases size by 20% */
+}
 </style>

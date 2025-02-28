@@ -13,6 +13,8 @@
   "dependencies": {
     "@clerk/vue": "^1.2.1",
     "@fontsource/open-sans": "^5.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
     "@schedule-x/calendar": "^2.20.0",
     "@schedule-x/calendar-controls": "^2.20.0",
     "@schedule-x/drag-and-drop": "^2.20.0",
@@ -21,6 +23,7 @@
     "@schedule-x/scroll-controller": "^2.20.0",
     "@schedule-x/theme-default": "^2.20.0",
     "@schedule-x/vue": "^2.18.0",
+    "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^3.0.1",
     "schedule-x": "^0.0.9",
     "vue": "^3.5.13",
