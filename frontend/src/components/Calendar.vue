@@ -6,7 +6,6 @@ import {
   viewMonthGrid,
 } from '@schedule-x/calendar'
 import '@schedule-x/theme-default/dist/index.css'
-import {createDragAndDropPlugin} from "@schedule-x/drag-and-drop";
 import {createScrollControllerPlugin} from "@schedule-x/scroll-controller";
 import {createEventRecurrencePlugin, createEventsServicePlugin} from "@schedule-x/event-recurrence";
 import {createEventModalPlugin} from "@schedule-x/event-modal";
@@ -28,7 +27,6 @@ const calendarApp = shallowRef(createCalendar({
   calendars: calendars,
   plugins: [
     eventModal,
-    createDragAndDropPlugin(),
     createScrollControllerPlugin({
       initialScroll: '07:00'
     }),

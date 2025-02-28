@@ -178,6 +178,7 @@ const closeSidebar = () => {
     color: white;
     padding: 10px;
     text-align: center;
+    color: black;
 }
 
 /* Logo styling */

@@ -7,22 +7,19 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
 }
 
 #app {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
 }
 
 .sx-vue-calendar-wrapper {
+  margin-top: 35px;
   width: 100%;
-  height: 800px;
+  height: 500px;
   max-height: 100vh;
-  background-color: red;
 }
 
 .sx__month-grid-cell {
