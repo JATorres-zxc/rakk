@@ -11,7 +11,7 @@ import Calendar from './components/Calendar.vue'
 
     <div class="main-content">
       <!-- HeaderBar (Blue) -->
-      <!-- <HeaderBar class="header-bar" /> -->
+      <HeaderBar class="header-bar" />
 
       <!-- Calendar (Yellow) -->
       <div class="calendar-wrapper">

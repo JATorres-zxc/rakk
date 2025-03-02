@@ -5,14 +5,6 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/vue'
 <template>
   <header class="header-bar">
     <nav class="navigation">
-      <a href="#" class="nav-item">
-        <img
-          src="https://cdn.builder.io/api/v1/image/assets/ecf01e10324340c9995a5c95c87db7a5/5fc0c7d0b9d9820e712b8955c4593741a73ce2a0326597e46524fe8c6eaa9cbb?apiKey=ecf01e10324340c9995a5c95c87db7a5&"
-          alt="Dashboard icon"
-          class="nav-icon"
-        />
-        <span class="nav-text">Dashboard</span>
-      </a>
       <a href="#" class="nav-item active">
         <img
           src="https://cdn.builder.io/api/v1/image/assets/ecf01e10324340c9995a5c95c87db7a5/f7a186f785f8690b20f39541b75ae76e779fb6e9098d8add23d77e9155a19404?apiKey=ecf01e10324340c9995a5c95c87db7a5&"
