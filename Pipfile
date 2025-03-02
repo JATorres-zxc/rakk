@@ -3,12 +3,24 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[[source]]
+url = "https://download.pytorch.org/whl/cpu"
+verify_ssl = true
+name = "pytorch"
+
 [packages]
 django = "*"
 djangorestframework = "*"
 psycopg = {extras = ["pool", "binary"], version = "*"}
 
 [dev-packages]
+notebook = "*"
+matplotlib = "*"
+pandas = "*"
+numpy = "*"
+torch = {index = "pytorch", version = "*"}
+keras = "*"
+pdfplumber = "*"
 
 [requires]
-python_version = "3.13"
+python_version = "3.11"
