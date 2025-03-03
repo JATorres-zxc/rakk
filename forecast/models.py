@@ -17,7 +17,7 @@ class CommodityForecaster(models.Model):
     trained_on = models.DateTimeField()
 
     def __str__(self) -> str:
-        return f"<Forecaster for {self.market}'s {self.commodity}"
+        return f"<Forecaster for {self.market}'s {self.commodity}>"
 
     def load_model(self) -> keras.Model:
         return keras.models.load_model(self.path)

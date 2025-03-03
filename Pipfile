@@ -14,13 +14,13 @@ djangorestframework = "*"
 psycopg = {extras = ["pool", "binary"], version = "*"}
 torch = {index = "pytorch", version = "*"}
 keras = "*"
+pandas = "*"
+numpy = "*"
 python-dotenv = "*"
 
 [dev-packages]
 notebook = "*"
 matplotlib = "*"
-pandas = "*"
-numpy = "*"
 
 [requires]
 python_version = "3.11"
