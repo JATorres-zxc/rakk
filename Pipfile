@@ -12,15 +12,15 @@ name = "pytorch"
 django = "*"
 djangorestframework = "*"
 psycopg = {extras = ["pool", "binary"], version = "*"}
+torch = {index = "pytorch", version = "*"}
+keras = "*"
+python-dotenv = "*"
 
 [dev-packages]
 notebook = "*"
 matplotlib = "*"
 pandas = "*"
 numpy = "*"
-torch = {index = "pytorch", version = "*"}
-keras = "*"
-pdfplumber = "*"
 
 [requires]
 python_version = "3.11"
