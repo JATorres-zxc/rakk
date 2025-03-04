@@ -19,6 +19,8 @@
                     <span>{{ item.name }}</span>
                 </li>
             </ul>
+            <!-- Submit Button -->
+            <button class="submit-btn" @click="submitSelection">Submit</button>
 
         </div>
 
@@ -124,6 +126,24 @@ const activeIndex = ref(null);
 const sidebarTop = ref(0);
 const floatingSidebar = ref(null);
 const selectedIndex = ref(null); // Track the selected menu item
+
+// Submit function
+const submitSelection = () => {
+  const selectedData = menuItems.value
+    .filter(item => item.subMenu.some(sub => sub.checked))
+    .map(item => ({
+      category: item.name,
+      selectedItems: item.subMenu.filter(sub => sub.checked).map(sub => sub.name)
+    }));
+
+  console.log("Submitting Data:", selectedData);
+  // You can replace this with an actual API call
+  // fetch('YOUR_BACKEND_ENDPOINT', {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(selectedData)
+  // });
+};
 
 const toggleSubSidebar = async (index, event) => {
   if (activeIndex.value === index) {
