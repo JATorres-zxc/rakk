@@ -11,7 +11,7 @@ import Calendar from './components/Calendar.vue'
 
     <div class="main-content">
       <!-- HeaderBar (Blue) -->
-      <!-- <HeaderBar class="header-bar" /> -->
+      <HeaderBar class="header-bar" />
 
       <!-- Calendar (Yellow) -->
       <div class="calendar-wrapper">
@@ -28,7 +28,7 @@ import Calendar from './components/Calendar.vue'
   left: 0;
   top: 0;
   height: 100vh; /* Full height */
-  width: 130px;
+  width: 135px;
   z-index: 1000; /* Keeps it on top */
 }
 
@@ -45,7 +45,7 @@ import Calendar from './components/Calendar.vue'
 .header-bar {
   position: fixed; /* Fixes it to the top */
   top: 0;
-  left: 130px; /* To avoid overlapping the sidebar */
+  left: 135px; /* To avoid overlapping the sidebar */
   right: 0;
   height: 60px; /* Adjust as needed */
   background: white; /* Ensure visibility */

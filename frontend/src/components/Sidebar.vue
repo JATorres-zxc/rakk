@@ -7,6 +7,51 @@
                 <img src="https://cdn.builder.io/api/v1/image/assets/ecf01e10324340c9995a5c95c87db7a5/e2433d35477616d63912ae308a20a85e61fe58c050f421ac21fd63e5612d5981?apiKey=ecf01e10324340c9995a5c95c87db7a5&" alt="Logo">
             </div>
 
+            <!-- Toggle Button -->
+
+                <div class="menu-item">
+                <img 
+                    :src="isMarketIconClicked ? marketIconColored : marketIcon" 
+                    alt="Toggle Market Dropdown" 
+                    class="toggle-market-dropdown" 
+                    @click="toggleMarketIcon"
+                    width="33" height="33"
+                />
+                <span class="menu-text">Markets</span>
+            </div>
+<!-- Multi-Select Market Dropdown -->
+<div v-if="isMarketDropdownOpen" class="market-dropdown">
+    <!-- Search Bar -->
+    <div class="market-list-header">
+    <p class="market-list-title" style="font-weight: bold;">Markets</p>
+    <img src="@/assets/icons/chevron_left.png" 
+                alt="Close" 
+                class="close-butn" 
+                @click="toggleMarketIcon">
+    </div>
+    <input type="text" v-model="searchQuery" placeholder="Search markets..." class="search-box" />
+
+    <!-- Dropdown List -->
+    <div class="dropdown-list" v-if="filteredMarkets.length > 0">
+        <div v-for="market in filteredMarkets" :key="market" @click="toggleMarketSelection(market)" 
+            :class="['dropdown-item', { 'selected': selectedMarkets.includes(market) }]">
+            {{ market }}
+        </div>
+    </div>
+
+    <!-- Selected Markets as Tags -->
+    <div class="selected-tags">
+        <span v-for="market in selectedMarkets" :key="market" class="tag">
+            {{ market }}
+            <span class="remove-tag" @click="removeMarket(market)">✖</span>
+        </span>
+    </div>
+
+    <!-- Submit Button -->
+
+</div>
+
+
             <ul>
                 <li v-for="(item, index) in menuItems" 
                     :key="index" 
@@ -20,35 +65,8 @@
                 </li>
             </ul>
 
-            <!-- Multi-Select Market Dropdown -->
-            <div class="market-dropdown">
-                <label for="market-search">Select Markets:</label>
-
-                <!-- Search Bar -->
-                <input type="text" v-model="searchQuery" placeholder="Search markets..." class="search-box" />
-
-                <!-- Dropdown List -->
-                <div class="dropdown-list" v-if="filteredMarkets.length > 0">
-                    <div v-for="market in filteredMarkets" :key="market" @click="toggleMarketSelection(market)" 
-                        :class="['dropdown-item', { 'selected': selectedMarkets.includes(market) }]">
-                        {{ market }}
-                    </div>
-                </div>
-
-                <!-- Selected Markets as Tags -->
-                <div class="selected-tags">
-                    <span v-for="market in selectedMarkets" :key="market" class="tag">
-                        {{ market }}
-                        <span class="remove-tag" @click="removeMarket(market)">✖</span>
-                    </span>
-                </div>
-
-                <!-- Submit Button -->
-                <button @click="submitMarkets">Submit Selected Markets</button>
-            </div>
-
             <!-- Submit Button -->
-            <button class="submit-btn" @click="submitSelection">Submit</button>
+            <button class="submit-btn" @click="handleSubmit">Submit</button>
 
         </div>
 
@@ -68,17 +86,16 @@
                 <li v-for="(subItem, subIndex) in menuItems[activeIndex].subMenu" 
                     :key="subIndex"
                     class="submenu-item">
-                    <!-- Bind the checkbox to the checked state -->
                     <input type="checkbox" 
-                           :id="`checkbox-${subIndex}`" 
+                           :id="'checkbox-' + subIndex" 
                            v-model="subItem.checked" />
-                    <label :for="`checkbox-${subIndex}`">{{ subItem.name }}</label>
+                    <label :for="'checkbox-' + subIndex">{{ subItem.name }}</label>
                 </li>
             </ul>
-            
         </div>
     </div>
 </template>
+
 
 <script setup>
 import { ref, computed, nextTick } from "vue";
@@ -87,14 +104,14 @@ import fishIcon from "@/assets/icons/fish.png";
 import poultryIcon from "@/assets/icons/poultry.png";
 import vegetableIcon from "@/assets/icons/vegetable.png";
 import sweetenerIcon from "@/assets/icons/sweetener.png";
-import othersIcon from "@/assets/icons/others.png";
+import marketIcon from "@/assets/icons/market.png";
 
 import riceIconColored from "@/assets/icons/rice_colored.png";
 import fishIconColored from "@/assets/icons/fish_colored.png";
 import poultryIconColored from "@/assets/icons/poultry_colored.png";
 import vegetableIconColored from "@/assets/icons/vegetable_colored.png";
 import sweetenerIconColored from "@/assets/icons/sweetener_colored.png";
-import othersIconColored from "@/assets/icons/others_colored.png";  
+import marketIconColored from "@/assets/icons/market_colored.png";  
 
 const hoverIndex = ref(null);
 
@@ -130,8 +147,17 @@ const marketList = ref([
   "Taguig People’s Market",
   "Trabajo Market"
 ]);
-
+const isMarketDropdownOpen = ref(false);
 const selectedMarkets = ref([]);
+const isMarketIconClicked = ref(false);
+const toggleMarketIcon = () => {
+    isMarketIconClicked.value = !isMarketIconClicked.value;
+    isMarketDropdownOpen.value = !isMarketDropdownOpen.value; // Toggles the dropdown too
+};
+const handleSubmit = () => {
+  submitSelection();
+  submitMarkets();
+};
 const searchQuery = ref("");
 // Computed property: Filter markets based on search query
 const filteredMarkets = computed(() => {
@@ -143,12 +169,20 @@ const filteredMarkets = computed(() => {
 
 // Toggle market selection
 const toggleMarketSelection = (market) => {
+    // Close the sidebar if it's open
+    if (activeIndex.value !== null) {
+        activeIndex.value = null;
+        selectedIndex.value = null;
+    }
+
+    // Toggle market selection
     if (selectedMarkets.value.includes(market)) {
         selectedMarkets.value = selectedMarkets.value.filter(m => m !== market);
     } else {
         selectedMarkets.value.push(market);
     }
 };
+
 
 // Remove a selected market
 const removeMarket = (market) => {
@@ -237,24 +271,30 @@ const submitSelection = () => {
 };
 
 const toggleSubSidebar = async (index, event) => {
+  // Close the market dropdown if it's open
+  if (isMarketDropdownOpen.value) {
+    isMarketDropdownOpen.value = false;
+    isMarketIconClicked.value = false;
+  }
+
   if (activeIndex.value === index) {
     activeIndex.value = null;
-    selectedIndex.value = null; // Unselect when closing
+    selectedIndex.value = null;
   } else {
     activeIndex.value = index;
-    selectedIndex.value = index; // Mark as selected
+    selectedIndex.value = index;
 
-    // Add flicker effect
+    // Flicker effect
     const clickedImage = event.currentTarget.querySelector("img");
     clickedImage.classList.add("flicker");
 
-    // Remove flicker effect after animation ends
     setTimeout(() => {
       clickedImage.classList.remove("flicker");
-    }, 300); // Match animation duration
+    }, 300);
 
     await nextTick();
 
+    // Sidebar positioning logic
     const clickedElement = event.currentTarget;
     const rect = clickedElement.getBoundingClientRect();
     const menuItemCenterY = rect.top + rect.height / 2;
@@ -271,6 +311,7 @@ const toggleSubSidebar = async (index, event) => {
   }
 };
 
+
 // Close when clicking the chevron_left button
 const closeSidebar = () => {
   activeIndex.value = null;
@@ -280,14 +321,22 @@ const closeSidebar = () => {
 <style scoped>
 
 .market-dropdown {
-    margin-top: 20px;
-    background: #fff;
+    margin-top: -100px;
+    background: #feffc3;
     padding: 15px;
-    border-radius: 5px;
-    width: 250px;
+    position: absolute;
+    left: 135px;
+    border-radius: 7px;
+    border: 1px solid #ccc;
+    width: 300px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
+/* .floating-sidebar {
+  border-radius: 7px;
+    width: 160px;
+    padding: 10px;
 
+} */
 .market-dropdown label {
     display: block;
     font-weight: bold;
@@ -301,6 +350,18 @@ const closeSidebar = () => {
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-bottom: 10px;
+}
+.toggle-market-dropdown {
+    display: inline-block;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.toggle-market-dropdown:hover {
+    text-decoration: underline;
 }
 
 /* Dropdown List */
@@ -433,7 +494,9 @@ ul {
 .menu-item.selected img { 
     transform: scale(1.3); /* Scale up the image */
 }
-
+img.selected img { 
+    transform: scale(1.3); /* Scale up the image */
+}
 .menu-item span {
     font-size: 16px;
     font-family: Inter, sans-serif;
@@ -483,16 +546,34 @@ ul {
     justify-content: center;
     position: relative;
 }
-
+.market-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
 .checkbox-list-title {
     flex-grow: 1;
     text-align: center;
     font-size: 18px;
 }
-
+.market-list-title {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 18px;
+}
 .close-btn {
     position: absolute;
     right: 0;
+    width: 18px;  /* Adjust size as needed */
+    height: 18px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+.close-butn {
+    position: absolute;
+    right: 0;
+    margin-right: 20px;
     width: 18px;  /* Adjust size as needed */
     height: 18px;
     cursor: pointer;
