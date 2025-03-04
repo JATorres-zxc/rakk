@@ -12,7 +12,19 @@ def save_trained_model_entries(apps, schema_editor):
         if entry.is_dir() or entry.name == ".gitignore":
             continue
         path = entry.path
-        market, commodity = entry.name.split("-", maxsplit=1)
+        name = entry.name
+        market = None
+        commodity = None
+
+        if name.startswith("Mega_Q") and "well-milled" in name:
+            splits = name.split("-", maxsplit=2)
+            market = "-".join(splits[:2])
+            commodity = splits[2]
+        elif name.startswith("Mega_Q"):
+            market, commodity = name.rsplit("-", maxsplit=1)
+        else:
+            market, commodity = name.split("-", maxsplit=1)
+
         market = market.replace("_", " ")
         commodity = " ".join(commodity.split("_")[:-1])
         CommodityForecaster(
