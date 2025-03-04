@@ -45,4 +45,4 @@ def predict_best_day(model, start_day, future_days):
             best_price = price
             best_date = best_date
 
-    return best_date
+    return {"best_date": best_date, "best_price": best_price}

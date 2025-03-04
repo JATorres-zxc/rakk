@@ -51,12 +51,13 @@ def get_predictions(request: Request) -> Request:
         market__in=queries["markets"], commodity__in=queries["commodities"],
     )
 
-    objects = {market: {} for market in queries["markets"]}
+    predictions = []
 
     for forecaster in entries:
-        best_day = predict_best_day(
+        prediction = predict_best_day(
             forecaster.load_model(), queries["start_day"], queries["days"],
         )
-        objects[forecaster.market][forecaster.commodity] = best_day
+        prediction["market"] = forecaster.market
+        predictions.append(prediction)
 
-    return Response(objects)
+    return Response({"predictions": predictions})
