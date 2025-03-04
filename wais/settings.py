@@ -96,11 +96,11 @@ DATABASES = {
             "service": "waisdb",
             "passfile": ".pgpass",
         },
-        "NAME": "waisdb",         # Your DB name
-        "USER": "your_user",      # Your PostgreSQL user
-        "PASSWORD": "your_password",  # Your PostgreSQL password
-        "HOST": "localhost",       # or your database server
-        "PORT": "5432",
+        # "NAME": "waisdb",         # Your DB name
+        # "USER": "your_user",      # Your PostgreSQL user
+        # "PASSWORD": "your_password",  # Your PostgreSQL password
+        # "HOST": "localhost",       # or your database server
+        # "PORT": "5432",
     }
 }
 
