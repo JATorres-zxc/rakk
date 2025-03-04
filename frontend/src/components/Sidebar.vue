@@ -44,7 +44,7 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button @click="submitMarkets">Submit Selected Markets</button>
+                <!-- <button @click="submitMarkets">Submit Selected Markets</button> -->
             </div>
 
 
@@ -62,11 +62,11 @@
                 <label for="days-to-predict">Days to Predict:</label>
                 <input type="number" v-model="daysToPredict" id="days-to-predict" min="1" />
 
-                <button @click="submitPrediction">Predict</button>
+                <!-- <button @click="submitPrediction">Predict</button> -->
             </div>
 
             <!-- Submit Button -->
-            <button class="submit-btn" @click="submitSelection">Submit</button>
+            <button class="submit-btn" @click="submitAllData">Submit</button>
 
         </div>
 
@@ -173,36 +173,37 @@ const submitPrediction = () => {
 
 // Market List from Image
 const marketList = ref([
-  "Agora Public Market/San Juan",
-  "Balintawak (Cloverleaf) Market",
-  "Bicutan Market",
-  "Blumentritt Market",
-  "Cartimar Market",
-  "Dagonoy Market",
-  "Guadalupe Public Market/Makati",
-  "Kamuning Public Market",
-  "La Huerta Market/Parañaque",
-  "New Las Piñas City Public Market",
-  "Malabon Central Market",
-  "Mandaluyong Public Market",
-  "Marikina Public Market",
-  "Maypajo Public Market/Caloocan",
-  "Mega Q-mart/Quezon City",
-  "Pamilihang Lungsod ng Muntinlupa",
-  "Muñoz Market/Quezon City",
-  "Murphy Public Market",
-  "Navotas Agora Market",
-  "New Marulas Public Market/Valenzuela",
-  "Paco Market",
-  "Pasay City Market",
-  "Pasig City Mega Market",
-  "Pateros Market",
-  "Pritil Market/Manila",
-  "Quinta Market/Manila",
-  "San Andres Market/Manila",
-  "Taguig People’s Market",
-  "Trabajo Market"
-]);
+        "Agora Public Market San Juan",
+        "Balintawak (Cloverleaf) Market",
+        "Bicutan Market",
+        "Blumentritt Market",
+        "Cartimar Market",
+        "Commonwealth Market Quezon City",
+        "Dagonoy Market",
+        "Guadalupe Public Market Makati",
+        "Kamuning Public Market",
+        "La Huerta Market Parañaque",
+        "Malabon Central Market",
+        "Mandaluyong Public Market",
+        "Marikina Public Market",
+        "Maypajo Public Market Caloocan",
+        "Mega Q-mart Quezon City",
+        "Muñoz Market Quezon City",
+        "Murphy Public Market",
+        "Navotas Agora Market",
+        "New Las Piñas City Public Market",
+        "New Marulas Public Market Valenzuela",
+        "Paco Market",
+        "Pamilihang Lungsod ng Muntinlupa",
+        "Pasay City Market",
+        "Pasig City Mega Market",
+        "Pateros Market",
+        "Pritil Market Manila",
+        "Quinta Market Manila",
+        "San Andres Market Manila",
+        "Taguig People s Market",
+        "Trabajo Market"
+    ]);
 
 const selectedMarkets = ref([]);
 const searchQuery = ref("");
@@ -344,12 +345,78 @@ const toggleSubSidebar = async (index, event) => {
   }
 };
 
+const submitAllData = () => {
+    if (!selectedDate.value || daysToPredict.value < 1 || daysToPredict.value > 10) {
+        alert("Please select a valid date and enter a number of days between 1 and 10.");
+        return;
+    }
+    if (selectedMarkets.value.length === 0) {
+        alert("Please select at least one market.");
+        return;
+    }
+
+    // ✅ Keep original capitalization of market names
+    const selectedCommodities = menuItems.value
+        .flatMap(item => item.subMenu.filter(sub => sub.checked).map(sub => sub.name.toLowerCase()));
+
+    const requestData = {
+        start_day: new Date(selectedDate.value).toISOString(),
+        days: daysToPredict.value,
+        markets: selectedMarkets.value, // Keep original casing
+        selectedCategories: selectedCommodities
+    };
+
+    console.log("Submitting All Data:", requestData);
+
+    // ✅ Construct the query string properly
+    let queryParams = new URLSearchParams();
+
+    // Add markets (Keep original case)
+    selectedMarkets.value.forEach(market => {
+        queryParams.append("markets", market);
+    });
+
+    // Add commodities (Lowercase)
+    selectedCommodities.forEach(commodity => {
+        queryParams.append("commodities", commodity);
+    });
+
+    // Append start_day & days
+    queryParams.append("start_day", requestData.start_day);
+    queryParams.append("days", requestData.days);
+    
+
+    // ✅ Replace `+` with `%20` to properly encode spaces
+    let formattedQuery = queryParams.toString().replace(/\+/g, "%20");
+
+    // ✅ Final URL
+    const apiUrl = `/forecast/predict/?${formattedQuery}`;
+    fetch(apiUrl, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => console.log("Success:", data))
+    .catch(error => console.error("Error:", error));
+};
+
+
+
+
+
 // Close when clicking the chevron_left button
 const closeSidebar = () => {
   activeIndex.value = null;
   selectedIndex.value = null; // Remove selection
 };
 </script>
+
+
+
+
+
+
+
 <style scoped>
 .prediction-section {
     margin-top: 20px;
