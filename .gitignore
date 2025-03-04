@@ -1,4 +1,6 @@
 .pgpass
 .env
-venv
+/venv
+/node_modules
+**/.ipynb_checkpoints
 data

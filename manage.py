@@ -5,6 +5,8 @@ import sys
 
 
 def main():
+    os.environ["KERAS_BACKEND"] = "torch"
+
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wais.settings')
     try:
