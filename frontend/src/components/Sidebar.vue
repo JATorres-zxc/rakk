@@ -19,6 +19,34 @@
                     <span>{{ item.name }}</span>
                 </li>
             </ul>
+
+            <!-- Multi-Select Market Dropdown -->
+            <div class="market-dropdown">
+                <label for="market-search">Select Markets:</label>
+
+                <!-- Search Bar -->
+                <input type="text" v-model="searchQuery" placeholder="Search markets..." class="search-box" />
+
+                <!-- Dropdown List -->
+                <div class="dropdown-list" v-if="filteredMarkets.length > 0">
+                    <div v-for="market in filteredMarkets" :key="market" @click="toggleMarketSelection(market)" 
+                        :class="['dropdown-item', { 'selected': selectedMarkets.includes(market) }]">
+                        {{ market }}
+                    </div>
+                </div>
+
+                <!-- Selected Markets as Tags -->
+                <div class="selected-tags">
+                    <span v-for="market in selectedMarkets" :key="market" class="tag">
+                        {{ market }}
+                        <span class="remove-tag" @click="removeMarket(market)">✖</span>
+                    </span>
+                </div>
+
+                <!-- Submit Button -->
+                <button @click="submitMarkets">Submit Selected Markets</button>
+            </div>
+
             <!-- Submit Button -->
             <button class="submit-btn" @click="submitSelection">Submit</button>
 
@@ -53,7 +81,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from "vue";
+import { ref, computed, nextTick } from "vue";
 import riceIcon from "@/assets/icons/rice.png";
 import fishIcon from "@/assets/icons/fish.png";
 import poultryIcon from "@/assets/icons/poultry.png";
@@ -66,9 +94,80 @@ import fishIconColored from "@/assets/icons/fish_colored.png";
 import poultryIconColored from "@/assets/icons/poultry_colored.png";
 import vegetableIconColored from "@/assets/icons/vegetable_colored.png";
 import sweetenerIconColored from "@/assets/icons/sweetener_colored.png";
-import othersIconColored from "@/assets/icons/others_colored.png";
+import othersIconColored from "@/assets/icons/others_colored.png";  
 
 const hoverIndex = ref(null);
+
+// Market List from Image
+const marketList = ref([
+  "Agora Public Market/San Juan",
+  "Balintawak (Cloverleaf) Market",
+  "Bicutan Market",
+  "Blumentritt Market",
+  "Cartimar Market",
+  "Dagonoy Market",
+  "Guadalupe Public Market/Makati",
+  "Kamuning Public Market",
+  "La Huerta Market/Parañaque",
+  "New Las Piñas City Public Market",
+  "Malabon Central Market",
+  "Mandaluyong Public Market",
+  "Marikina Public Market",
+  "Maypajo Public Market/Caloocan",
+  "Mega Q-mart/Quezon City",
+  "Pamilihang Lungsod ng Muntinlupa",
+  "Muñoz Market/Quezon City",
+  "Murphy Public Market",
+  "Navotas Agora Market",
+  "New Marulas Public Market/Valenzuela",
+  "Paco Market",
+  "Pasay City Market",
+  "Pasig City Mega Market",
+  "Pateros Market",
+  "Pritil Market/Manila",
+  "Quinta Market/Manila",
+  "San Andres Market/Manila",
+  "Taguig People’s Market",
+  "Trabajo Market"
+]);
+
+const selectedMarkets = ref([]);
+const searchQuery = ref("");
+// Computed property: Filter markets based on search query
+const filteredMarkets = computed(() => {
+    if (!searchQuery.value) return marketList.value;
+    return marketList.value.filter(market => 
+        market.toLowerCase().includes(searchQuery.value.toLowerCase())
+    );
+});
+
+// Toggle market selection
+const toggleMarketSelection = (market) => {
+    if (selectedMarkets.value.includes(market)) {
+        selectedMarkets.value = selectedMarkets.value.filter(m => m !== market);
+    } else {
+        selectedMarkets.value.push(market);
+    }
+};
+
+// Remove a selected market
+const removeMarket = (market) => {
+    selectedMarkets.value = selectedMarkets.value.filter(m => m !== market);
+};
+// Submit Selected Markets
+const submitMarkets = () => {
+    if (selectedMarkets.value.length > 0) {
+        console.log("Submitting Markets:", selectedMarkets.value);
+        // Send to API
+        // fetch('YOUR_BACKEND_ENDPOINT', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify({ markets: selectedMarkets.value })
+        // });
+    } else {
+        alert("Please select at least one market.");
+    }
+};
 
 const menuItems = ref([
   { 
@@ -112,14 +211,6 @@ const menuItems = ref([
     hoverIcon: sweetenerIconColored,
     subMenu: [{ name: "Sugar (Washed)", checked: false }]
   },
-  { 
-    name: "Others", 
-    icon: othersIcon, 
-    hoverIcon: othersIconColored,
-    subMenu: [
-      { name: "Gas", checked: false }
-    ]
-  }
 ]);
 
 const activeIndex = ref(null);
@@ -187,6 +278,97 @@ const closeSidebar = () => {
 };
 </script>
 <style scoped>
+
+.market-dropdown {
+    margin-top: 20px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    width: 250px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.market-dropdown label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Search Box */
+.search-box {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+/* Dropdown List */
+.dropdown-list {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: white;
+}
+
+.dropdown-item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdown-item.selected {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Selected Markets as Tags */
+.selected-tags {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.tag {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.remove-tag {
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.remove-tag:hover {
+    color: red;
+}
+
+/* Submit Button */
+button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
 .flex {
     display: flex;
     position: relative;
