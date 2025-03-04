@@ -35,15 +35,20 @@
                 @click="closeSidebar">
             </div>
             <ul>
-                <li v-for="(subItem, subIndex) in menuItems[activeIndex].subMenu" 
-                    :key="subIndex"
-                    class="submenu-item">
-                    <!-- Bind the checkbox to the checked state -->
-                    <input type="checkbox" 
-                           :id="`checkbox-${subIndex}`" 
-                           v-model="subItem.checked" />
-                    <label :for="`checkbox-${subIndex}`">{{ subItem.name }}</label>
-                </li>
+              <li v-for="(subItem, subIndex) in menuItems[activeIndex].subMenu" 
+                  :key="subIndex"
+                  class="submenu-item">
+                  <!-- Conditionally render checkbox only if the name is not 'No products found' -->
+                  <template v-if="subItem.name !== 'No products found'">
+                      <input type="checkbox" 
+                            :id="`checkbox-${subIndex}`" 
+                            v-model="subItem.checked" />
+                      <label :for="`checkbox-${subIndex}`">{{ subItem.name }}</label>
+                  </template>
+                  <!-- Just show the name without a checkbox -->
+                  <span v-else>{{ subItem.name }}</span>
+              </li>
+
             </ul>
             
         </div>
@@ -115,7 +120,7 @@ const menuItems = ref([
     icon: othersIcon, 
     hoverIcon: othersIconColored,
     subMenu: [
-      { name: "Gas", checked: false }
+      { name: "No products found", checked: false }
     ]
   }
 ]);
@@ -223,7 +228,7 @@ ul {
 .menu-item img {
     width: 34px;
     height: 34px;
-    margin-bottom: 0px;
+    margin-bottom: 4px;
     transition: transform 0.2s ease-in-out; /* Smooth transition */
 }
 

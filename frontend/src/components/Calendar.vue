@@ -14,6 +14,8 @@ import { calendars } from "../calendars";
 import { shallowRef } from "vue";
 import type { CSSProperties } from "vue";
 import {createCalendarControlsPlugin} from "@schedule-x/calendar-controls";
+import { events } from "../data/events";
+import { faAlignCenter } from '@fortawesome/free-solid-svg-icons';
 
 
 const eventsService = createEventsServicePlugin();
@@ -21,7 +23,7 @@ const calendarControls = createCalendarControlsPlugin();
 const eventModal = createEventModalPlugin();
 
 const calendarApp = shallowRef(createCalendar({
-  selectedDate: '2025-02-25',
+  selectedDate: new Date().toISOString().split('T')[0],
   locale: 'en-UK',
   views: [viewMonthAgenda, viewMonthGrid],
   defaultView: viewMonthGrid.name,
@@ -35,40 +37,7 @@ const calendarApp = shallowRef(createCalendar({
     eventsService,
     calendarControls
   ],
-  events: [
-    {
-      id: 1,
-      start: '2025-02-28',
-      end: '2025-02-28',
-      title: 'hi',
-      calendarId: 'work',
-    },
-    {
-      id: 2,
-      start: '2024-06-28 08:00',
-      end: '2024-06-28 10:00',
-      title: 'hi again',
-      calendarId: 'work',
-    },
-    {
-  id: 3,
-  start: '2025-02-22',
-  end: '2025-02-22',
-  title: 'Chicken Egg',
-  calendarId: 'shopping',
-  items: [
-    { name: 'Tilapia', bestDate: '12-February-2025', price: 160.00 },
-    { name: 'Rice', bestDate: '10-February-2025', price: 45.00 },
-    { name: 'Ginger', bestDate: '19-February-2025', price: 190.00 },
-    { name: 'Egg', bestDate: '28-February-2025', price: 8.00 },
-    { name: 'Tomato', bestDate: '18-February-2025', price: 60.00 },
-    { name: 'Sugar', bestDate: '04-February-2025', price: 75.00 },
-    { name: 'Pork Belly', bestDate: '10-February-2025', price: 460.00 },
-    { name: 'Galunggong', bestDate: '22-February-2025', price: 300.00 }
-  ]
-}
-
-  ],
+  events: events,
   monthGridOptions: {
     nEventsPerDay: 3,
   },
@@ -101,13 +70,12 @@ const formatDateRange = (start:string, end:string) => {
 };
 
 
-const eventStyles = {
+const eventStyles: CSSProperties = {
   width: '100%',
   height: '100%',
-  backgroundColor: 'white',
-  border: '2px solid black',
+  backgroundColor: '#FDFDE4',
   borderRadius: '4px',
-  padding: '0 4px',
+  marginLeft: '10px',
 }
 
 const eventModalStyles: CSSProperties = {
@@ -165,7 +133,7 @@ const eventModalStyles: CSSProperties = {
         <tr>
           <th>Item</th>
           <th>Best Date to Buy</th>
-          <th>Price</th>
+          <th>Price This Day</th>
         </tr>
       </thead>
       <tbody>
