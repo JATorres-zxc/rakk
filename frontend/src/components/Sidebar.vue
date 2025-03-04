@@ -47,6 +47,18 @@
                 <button @click="submitMarkets">Submit Selected Markets</button>
             </div>
 
+
+            <!-- Date Picker and Prediction Days Input -->
+            <div class="prediction-section">
+                <label for="prediction-date">Select Date:</label>
+                <input type="date" v-model="selectedDate" id="prediction-date" />
+
+                <label for="days-to-predict">Days to Predict:</label>
+                <input type="number" v-model="daysToPredict" id="days-to-predict" min="1" />
+
+                <button @click="submitPrediction">Predict</button>
+            </div>
+
             <!-- Submit Button -->
             <button class="submit-btn" @click="submitSelection">Submit</button>
 
@@ -97,6 +109,49 @@ import sweetenerIconColored from "@/assets/icons/sweetener_colored.png";
 import othersIconColored from "@/assets/icons/others_colored.png";  
 
 const hoverIndex = ref(null);
+
+const selectedDate = ref("");
+const daysToPredict = ref(1);
+
+const submitPrediction = () => {
+    if (!selectedDate.value || daysToPredict.value < 1) {
+        alert("Please select a valid date and enter a positive number of days.");
+        return;
+    }
+
+    if (daysToPredict.value > 50) {
+        alert("The maximum number of days to predict is 50.");
+        daysToPredict.value = 50; // Optionally, reset it to 50
+        return;
+    }
+
+    // Convert selected date to ISO format
+    const isoDate = new Date(selectedDate.value).toISOString();
+
+    const requestData = {
+        date: isoDate,
+        days: daysToPredict.value,
+    };
+
+    console.log("Submitting Prediction Data:", requestData);
+
+    // Send to API
+    // fetch('YOUR_BACKEND_ENDPOINT', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(requestData)
+    // });
+};
+
+
+
+
+
+
+
+
+
+
 
 // Market List from Image
 const marketList = ref([
@@ -278,6 +333,43 @@ const closeSidebar = () => {
 };
 </script>
 <style scoped>
+.prediction-section {
+    margin-top: 20px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    width: 250px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.prediction-section label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.prediction-section input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.prediction-section button {
+    width: 100%;
+    padding: 8px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.prediction-section button:hover {
+    background-color: #218838;
+}
 
 .market-dropdown {
     margin-top: 20px;
