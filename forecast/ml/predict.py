@@ -8,7 +8,7 @@ DATA["date"] = pd.to_datetime(DATA["date"])
 
 def delta_days(start_day):
     delta = (
-        start_day.tz_localize(None)
+        pd.to_datetime(start_day).tz_localize(None)
         - pd.to_datetime(DATA.tail(1)["date"].values)
     )
 
@@ -20,10 +20,19 @@ def generate_dates(start_day, delta_days):
         yield start_day + pd.Timedelta(days=days)
 
 
-def predict_best_day(model, start_day, future_days):
-    start_day = pd.to_datetime(start_day)
-    rev_data = DATA[::-1]
+def format_commodity(commodity):
+    return commodity.replace("[", "(").replace("]", ")")
+
+
+def predict_best_day(market, commodity, model, start_day, future_days):
+    com = commodity
+    commodity = format_commodity(commodity)
     predict_days = future_days + delta_days(start_day)
+    start_day = pd.to_datetime(start_day)
+
+    rev_data = DATA[::-1]
+    rev_data = rev_data[rev_data["market"] == market]
+    rev_data = rev_data[rev_data["commodity"] == commodity]
 
     input_data = []
     day = 0
@@ -33,11 +42,11 @@ def predict_best_day(model, start_day, future_days):
         day += 1
         input_data.append(rev_data[["low", "high"]][ith:ith + 3].to_numpy())
 
-    input_data = np.array(input_data, dtype="float32")
+    input_data = np.array(input_data, dtype="float32")[::-1]
     predictions = model.predict(input_data, verbose=0).flatten()
 
     date_to_price = list(zip(
-        generate_dates(start_day, delta_days), predictions
+        generate_dates(start_day, predict_days), predictions
     ))
     (best_date, best_price) = date_to_price.pop()
     for date, price in date_to_price:
@@ -45,4 +54,9 @@ def predict_best_day(model, start_day, future_days):
             best_price = price
             best_date = best_date
 
-    return {"best_date": best_date, "best_price": best_price}
+    return {
+        "market": market,
+        "commodity": com,
+        "best_date": best_date,
+        "best_price": best_price,
+    }
