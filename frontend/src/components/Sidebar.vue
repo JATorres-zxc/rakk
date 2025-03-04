@@ -84,17 +84,23 @@ const menuItems = ref([
     name: "Fish", 
     icon: fishIcon, 
     hoverIcon: fishIconColored,
-    subMenu: [{ name: "Tilapia", checked: false }, { name: "Galunggong", checked: false }]
+    subMenu: [
+      { name: "Tilapia", checked: false },
+      { name: "Galunggong", checked: false },
+      { name: "Galunggong (local)", checked: false },
+    ]
   },
   { 
     name: "Poultry", 
     icon: poultryIcon, 
     hoverIcon: poultryIconColored,
     subMenu: [
-      { name: "Fresh Pork Kasim/Pigue", checked: false },
+      { name: "Egg (Medium)", checked: false },
       { name: "Fresh Pork Liempo", checked: false },
       { name: "Fresh Whole Chicken", checked: false },
-      { name: "Egg (Medium)", checked: false }
+      { name: "Fresh Pork Kasim/Pigue", checked: false },
+      { name: "Frozen Pork Kasim/Pigue", checked: false },
+      { name: "Frozen Pork Liempo", checked: false },
     ]
   },
   { 
@@ -106,14 +112,23 @@ const menuItems = ref([
       { name: "Eggplant", checked: false },
       { name: "Tomato", checked: false },
       { name: "Cabbage", checked: false },
-      { name: "Red Onion", checked: false }
+      { name: "Cabbage (Rareball)", checked: false },
+      { name: "Cabbage (Scorpio)", checked: false },
+      { name: "Cabbage (Wonderball)", checked: false },
+      { name: "Corn (White)", checked: false },
+      { name: "Corn (Yellow)", checked: false },
+      { name: "Pechay Baguio", checked: false },
+      { name: "Red Onion (Local)", checked: false }
     ]
   },
   { 
     name: "Sweetener", 
     icon: sweetenerIcon, 
     hoverIcon: sweetenerIconColored,
-    subMenu: [{ name: "Sugar (Washed)", checked: false }]
+    subMenu: [
+      { name: "Sugar (Washed)", checked: false },
+      { name: "Sugar (Refined)", checked: false },
+    ]
   },
   { 
     name: "Others", 

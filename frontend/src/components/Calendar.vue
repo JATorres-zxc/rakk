@@ -79,16 +79,17 @@ const eventStyles: CSSProperties = {
 }
 
 const eventModalStyles: CSSProperties = {
-  boxShadow: "0 0 2em #123",
-  backgroundColor: "#feffaf", // Light yellowish background
+  width: "60vw",
+  maxWidth: "90vw",
+  maxHeight: "80vh",
+  backgroundColor: "#feffaf",
   border: "2px solid black",
   borderRadius: "8px",
   padding: "1rem",
-  width: "500px",
-  maxWidth: "90vw",
-  maxHeight: "80vh",
-  overflowY: "auto", // Ensure this is a valid CSS value
+  boxShadow: "0 0 2em #123",
+  overflow: "hidden",
 };
+
 
 
 </script>
@@ -112,42 +113,50 @@ const eventModalStyles: CSSProperties = {
       </template>
 
       <template #monthGridEvent="{ calendarEvent }">
-        <div :style="eventStyles">
+        <div class="event-box">
           {{ calendarEvent.title }}
         </div>
       </template>
 
       <template #eventModal="{ calendarEvent }">
-  <div :style="eventModalStyles">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-      <p style="font-weight: bold; font-size: large; margin: 0; flex-grow: 1; text-align: center;">
-        {{ formatDateRange(calendarEvent.start, calendarEvent.end) }}
-      </p>
-      <button @click="closeModal" class="close-button">
-        <img src="@/assets/close-icon.png" alt="Close" />
-      </button>
+  <div class="modal-container">
+    <div :style="eventModalStyles">
+      <div style="position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <p style="font-weight: bold; font-size: large; margin: 0; flex-grow: 1; text-align: center;">
+          {{ formatDateRange(calendarEvent.start, calendarEvent.end) }}
+        </p>
+        <button @click="closeModal" class="close-button">
+          <img src="@/assets/close-icon.png" alt="Close" />
+        </button>
+      </div>
+
+      <div class="event-modal-content">
+      <table>
+        <thead class="sticky-header">
+          <tr>
+            <th>Item</th>
+            <th>Best Date to Buy</th>
+            <th>Price This Day</th>
+            <th>Place to Buy</th>
+          </tr>
+        </thead>
+        <tbody class="scrollable-body">
+          <tr v-for="item in calendarEvent.items" :key="item.name">
+            <td>
+              <input type="checkbox" />
+              {{ item.name }}
+            </td>
+            <td>{{ item.bestDate }}</td>
+            <td>₱{{ item.price.toFixed(2) }}</td>
+            <td>{{ item.placeToBuy }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Item</th>
-          <th>Best Date to Buy</th>
-          <th>Price This Day</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in calendarEvent.items" :key="item.name">
-          <td>
-            <input type="checkbox" />
-            {{ item.name }}
-          </td>
-          <td>{{ item.bestDate }}</td>
-          <td>₱{{ item.price.toFixed(2) }}</td>
-        </tr>
-      </tbody>
-    </table>
+    </div>
   </div>
+  
 </template>
 
 
@@ -164,11 +173,35 @@ table {
 
 th, td {
   padding: 10px; /* Adds spacing inside cells */
-  text-align: center; /* Aligns text to center */
+  text-align: left; /* Aligns text to center */
 }
 
 th {
   width: 33.33%; /* Distributes columns equally */
+}
+
+th:nth-child(1), td:nth-child(1) { /* Item Column */
+  width: 40%;
+}
+
+th:nth-child(2), td:nth-child(2) { /* Best Date to Buy Column */
+  width: 20%;
+}
+
+th:nth-child(3), td:nth-child(3) { /* Price This Day Column */
+  width: 20%;
+}
+
+th:nth-child(4), td:nth-child(4) { /* Place to Buy Column */
+  width: 20%;
+}
+
+th:nth-child(1) { /* Center only the "Item" header */
+  text-align: center;
+}
+
+td:nth-child(1) { /* Keep the items left-aligned */
+  text-align: left;
 }
 
 .close-button {
@@ -176,6 +209,10 @@ th {
   border: none;
   cursor: pointer;
   padding: 0;
+  position: sticky;
+  top: 0; /* Stick to the top */
+  right: 0;
+  z-index: 10; /* Ensure it stays above other content */
 }
 
 .close-button img {
@@ -185,6 +222,59 @@ th {
 }
 
 .close-button:hover img {
-  transform: scale(1.2); /* Increases size by 20% */
+  transform: scale(1.2);
 }
+
+/* Ensure modal content scrolls without affecting close button */
+.event-modal-content {
+  max-height: 70vh; /* Limit height */
+  overflow-y: auto; /* Enable scrolling */
+  padding-top: 0px; /* Ensure content doesn't overlap the sticky button */
+  padding-right: 10px;
+}
+
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(100% - 335px); /* Adjust for sidebar */
+  height: calc(100% - 60px); /* Adjust for header */
+  margin-left: 250px; /* Push right from sidebar */
+  margin-top: 60px; /* Push down from header */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Ensure it appears on top */
+}
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background: rgb(254, 255, 175); /* Ensure background remains visible */
+  z-index: 10; /* Keeps it above scrollable content */
+  color: rgb(0, 0, 0);
+}
+
+.scrollable-body {
+  display: table-row-group; /* Ensures proper table layout */
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+input[type="checkbox"] {
+  accent-color: black;
+}
+
+.event-box {
+  width: 100%;
+  height: 100%;
+  background-color: #FDFDE4;
+  border-radius: 4px;
+  margin-left: 10px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.event-box:hover {
+  background-color: rgb(254, 255, 175);
+}
+
 </style>
