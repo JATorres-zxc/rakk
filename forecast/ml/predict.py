@@ -27,8 +27,8 @@ def format_commodity(commodity):
 def predict_best_day(market, commodity, model, start_day, future_days):
     com = commodity
     commodity = format_commodity(commodity)
-    predict_days = future_days + delta_days(start_day)
     start_day = pd.to_datetime(start_day)
+    predict_days = future_days + delta_days(start_day)
 
     rev_data = DATA[::-1]
     rev_data = rev_data[rev_data["market"] == market]
@@ -46,7 +46,11 @@ def predict_best_day(market, commodity, model, start_day, future_days):
     predictions = model.predict(input_data, verbose=0).flatten()
 
     date_to_price = list(zip(
-        generate_dates(start_day, predict_days), predictions
+        generate_dates(
+            pd.to_datetime(DATA.tail(1)["date"].values)[0],
+            predict_days,
+        ),
+        predictions,
     ))
     (best_date, best_price) = date_to_price.pop()
     for date, price in date_to_price:
