@@ -35,6 +35,9 @@ def predict_best_day(market, commodity, model, start_day, future_days):
     rev_data = rev_data[rev_data["market"] == market]
     rev_data = rev_data[rev_data["commodity"] == commodity]
 
+    if rev_data.empty:
+        return {}
+
     input_data = []
     day = 0
     for ith in range(0, rev_data.shape[0], 3):
