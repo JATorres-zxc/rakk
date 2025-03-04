@@ -51,7 +51,13 @@
             <!-- Date Picker and Prediction Days Input -->
             <div class="prediction-section">
                 <label for="prediction-date">Select Date:</label>
-                <input type="date" v-model="selectedDate" id="prediction-date" />
+                <input 
+                    type="date" 
+                    v-model="selectedDate" 
+                    id="prediction-date"
+                    :min="minDate"
+                    :max="maxDate"
+                />
 
                 <label for="days-to-predict">Days to Predict:</label>
                 <input type="number" v-model="daysToPredict" id="days-to-predict" min="1" />
@@ -113,19 +119,31 @@ const hoverIndex = ref(null);
 const selectedDate = ref("");
 const daysToPredict = ref(1);
 
+const today = new Date();
+const minDate = today.toISOString().split("T")[0]; // Today's date in YYYY-MM-DD format
+
+const maxDateObj = new Date();
+maxDateObj.setDate(today.getDate() + 10); // Add 10 days
+const maxDate = maxDateObj.toISOString().split("T")[0]; // Max date in YYYY-MM-DD
+
 const submitPrediction = () => {
     if (!selectedDate.value || daysToPredict.value < 1) {
         alert("Please select a valid date and enter a positive number of days.");
         return;
     }
 
-    if (daysToPredict.value > 50) {
-        alert("The maximum number of days to predict is 50.");
-        daysToPredict.value = 50; // Optionally, reset it to 50
+    if (daysToPredict.value > 10) {
+        alert("The maximum number of days to predict is 10.");
+        daysToPredict.value = 10; // Optionally, reset it to 10
         return;
     }
 
-    // Convert selected date to ISO format
+    if (daysToPredict.value < 1) {
+        alert("The minumu number of days to predict is 1.");
+        daysToPredict.value = 1; 
+        return;
+    }s
+
     const isoDate = new Date(selectedDate.value).toISOString();
 
     const requestData = {
