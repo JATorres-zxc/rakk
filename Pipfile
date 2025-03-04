@@ -17,6 +17,7 @@ keras = "*"
 pandas = "*"
 numpy = "*"
 python-dotenv = "*"
+pyjwt = "*"
 
 [dev-packages]
 notebook = "*"

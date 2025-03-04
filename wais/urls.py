@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.http.response import HttpResponse
-from django.urls import path
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/ping/', lambda req: HttpResponse("pong")),
+    path("api/ping/", lambda req: HttpResponse("pong")),
+    path("api/forecast/", include("forecast.urls")),
 ]

@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from forecast.models import CommodityForecaster
+
+
+@admin.register(CommodityForecaster)
+class CommodityForecasterAdmin(admin.ModelAdmin):
+    pass

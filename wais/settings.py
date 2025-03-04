@@ -96,11 +96,11 @@ DATABASES = {
             "service": "waisdb",
             "passfile": ".pgpass",
         },
-        "NAME": "waisdb",         # Your DB name
-        "USER": "your_user",      # Your PostgreSQL user
-        "PASSWORD": "your_password",  # Your PostgreSQL password
-        "HOST": "localhost",       # or your database server
-        "PORT": "5432",
+        # "NAME": "waisdb",         # Your DB name
+        # "USER": "your_user",      # Your PostgreSQL user
+        # "PASSWORD": "your_password",  # Your PostgreSQL password
+        # "HOST": "localhost",       # or your database server
+        # "PORT": "5432",
     }
 }
 
@@ -145,3 +145,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
